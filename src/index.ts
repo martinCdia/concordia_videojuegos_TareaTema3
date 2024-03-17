@@ -8,7 +8,7 @@ const app = new Application({
 	resolution: window.devicePixelRatio || 1,
 	autoDensity: true,
 	backgroundColor: 0x6495ed,
-	width:1600,
+	width:1280,
 	height: 720
 });
 

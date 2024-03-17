@@ -37,8 +37,11 @@ export class TickerScene extends Container implements IUpdateable {
 
     public update(_deltaTime: number, deltaFrame: number): void {
         this.knightAnimated.update(deltaFrame);
-        if(this.knightAnimated.x < (window.innerWidth - 1100)) {
+        if(this.knightAnimated.x < window.innerWidth) {
             this.knightAnimated.x ++;
+            //console.log(this.knightAnimated.x++);
+            //console.log(window.innerWidth);
+            console.log();
         }else{
             this.knightAnimated.x = 0;
         }
