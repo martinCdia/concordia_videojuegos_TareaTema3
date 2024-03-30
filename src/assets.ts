@@ -12,4 +12,9 @@ export const assets = [
     {url: "./knight/1_atk_10.png", name: "knightAttak10"},
     {url: "./knight/1_atk_11.png", name: "knightAttak11"},
 
+    {url: "./platform/Ground_Platforms_24.png", name: "platformLeft"},
+    {url: "./platform/Ground_Platforms_25.png", name: "platformCenter"},
+    {url: "./platform/Ground_Platforms_26.png", name: "platformRight"},
+
+    {url: "./background/bgx3.png", name: "Background"},
 ];

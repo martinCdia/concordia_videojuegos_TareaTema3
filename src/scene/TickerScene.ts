@@ -1,90 +1,83 @@
-import { AnimatedSprite, Container, Graphics, Texture } from "pixi.js";
+import { Container, Sprite } from "pixi.js";
 import { IUpdateable } from "../utils/IUpdateable";
-import { PhysicsContainer } from "../game/PhysicsContainer";
+//import { PhysicsContainer } from "../game/PhysicsContainer";
 import { HEIGHT, WIDTH } from "..";
+import { Player } from "../game/Player";
+import { Platform } from "../game/Platform";
+import { checkCollision } from "../game/IHitbox";
+//import { IHitbox } from "../game/IHitbox";
 //import { Keyboard } from "../utils/Keyboard";
 
 export class TickerScene extends Container implements IUpdateable {
 
-    private knightAnimated: AnimatedSprite;
+    private playerKnight: Player;
 
-    private physKnight: PhysicsContainer
+    private platforms: Platform[];
     
     constructor() {
         super();
 
-        const dialog = new Container();
-        dialog.scale.set(2);
-        this.addChild(dialog);
+        const bg = Sprite.from("Background");
+        bg.scale.set(1.3);
+        bg.width = WIDTH;
+        this.addChild(bg);
 
-        this.knightAnimated = new AnimatedSprite(
-            [
-                Texture.from("knightAttak1"),
-                Texture.from("knightAttak2"),
-                Texture.from("knightAttak3"),
-                Texture.from("knightAttak4"),
-                Texture.from("knightAttak5"),
-                Texture.from("knightAttak6"),
-                Texture.from("knightAttak7"),
-                Texture.from("knightAttak8"),
-                Texture.from("knightAttak9"),
-                Texture.from("knightAttak10"),
-                Texture.from("knightAttak11"),
-            ], 
-            false
-        );
-        this.knightAnimated.play();
-        this.knightAnimated.anchor.set(0.5,1);
-        this.knightAnimated.animationSpeed = 0.35;
-        //dialog.addChild(this.knightAnimated);
+        this.platforms = [];
 
-        this.physKnight = new PhysicsContainer();
-        this.physKnight.scale.set(2);
-        this.physKnight.speed.x = 250;
-        this.physKnight.speed.y = 0;
-        this.physKnight.acceleration.y = 10;
-        this.addChild(this.physKnight);
+        this.playerKnight = new Player();
+        this.playerKnight.scale.set(2);
+        this.addChild(this.playerKnight);
 
-        const auxZero = new Graphics();
-        auxZero.beginFill(0xffffff);
-        auxZero.drawCircle(0,0,5);
-        auxZero.endFill();
+        const platform_1 = new Platform();
+        platform_1.x = 100;
+        platform_1.y = 550;
+        platform_1.scale.set(0.5)
+        this.addChild(platform_1);
+        this.platforms.push(platform_1);
 
-        this.physKnight.addChild(this.knightAnimated)
-        this.physKnight.addChild(auxZero);
+        const platform_2 = new Platform();
+        platform_2.x = 800;
+        platform_2.y = 550;
+        platform_2.scale.set(0.5);
+        this.addChild(platform_2);
+        this.platforms.push(platform_2);
 
     }
 
-    public update(deltaTime: number, deltaFrame: number): void {
-        this.knightAnimated.update(deltaFrame); // update animation
+    public update(deltaTime: number, _deltaFrame: number): void {
+        
+        this.playerKnight.update(deltaTime); // update animation
 
-        // craft delta time in seconds
-        const dt = deltaTime / 1000;
+        for (let platform of this.platforms) {
 
-        // update physics
-        this.physKnight.update(dt);
+            const overlap = checkCollision(this.playerKnight, platform);
+
+            if (overlap != null){
+
+                this.playerKnight.separate(overlap, platform.position);
+
+                
+                
+            }
+        }
+        
 
         // limit horizontal
-        if (this.physKnight.x > WIDTH){
+        if (this.playerKnight.x > WIDTH){
             // limit right
-            this.physKnight.x = WIDTH;
-            this.physKnight.speed.x = Math.abs(this.physKnight.speed.x) * -1;
-            this.physKnight.scale.x = -1.5;
-            this.knightAnimated.tint = 0x00ff00;
+            this.playerKnight.x = WIDTH;
 
-        }else if(this.physKnight.x < 0 ){
+        }else if(this.playerKnight.x < 0 ){
             // limit left
-            this.physKnight.x = 0;
-            this.physKnight.speed.x = Math.abs(this.physKnight.speed.x);
-            this.physKnight.scale.x = 1.5;
-            this.knightAnimated.tint = 0xff0000;
+            this.playerKnight.x = 0;
         }
 
         // limit vertical
-        if(this.physKnight.y > HEIGHT){
-            this.physKnight.y = HEIGHT;
-            this.physKnight.speed.y = -500 * Math.random();
-            this.knightAnimated.tint = 0x0000ff;
+        if(this.playerKnight.y > HEIGHT){
+    
+            this.playerKnight.y = HEIGHT;
+            this.playerKnight.speed.y = 0;
+            this.playerKnight.canJump = true;
         }
 
     };
