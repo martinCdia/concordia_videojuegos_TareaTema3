@@ -5,9 +5,13 @@ import { IHitbox } from "./IHitbox";
 
 export class Player extends PhysicsContainer implements IHitbox {
 
-    private static readonly GRAVITY = 10;
+    // Velocidad con la que cae el objeto player
+    private static readonly GRAVITY = 15; 
 
-    private static readonly MOVE_SPEED = 200;
+    // Velocidad de movimiento horizontal del objeto player en px por frame.  
+    private static readonly MOVE_SPEED = 300;
+
+    private static readonly JUMP_SPEED = 600;
 
     public canJump = true;
 
@@ -20,7 +24,7 @@ export class Player extends PhysicsContainer implements IHitbox {
 
         this.knightAnimated = new AnimatedSprite(
             [
-                Texture.from("knightAttak1"),
+                /*Texture.from("knightAttak1"),
                 Texture.from("knightAttak2"),
                 Texture.from("knightAttak3"),
                 Texture.from("knightAttak4"),
@@ -30,7 +34,16 @@ export class Player extends PhysicsContainer implements IHitbox {
                 Texture.from("knightAttak8"),
                 Texture.from("knightAttak9"),
                 Texture.from("knightAttak10"),
-                Texture.from("knightAttak11"),
+                Texture.from("knightAttak11"),*/
+
+                Texture.from("knightRun1"),
+                Texture.from("knightRun2"),
+                Texture.from("knightRun3"),
+                Texture.from("knightRun4"),
+                Texture.from("knightRun5"),
+                Texture.from("knightRun6"),
+                Texture.from("knightRun7"),
+                Texture.from("knightRun8"),
             ], 
             false
         );
@@ -39,21 +52,21 @@ export class Player extends PhysicsContainer implements IHitbox {
         this.knightAnimated.anchor.set(0.5,1);
         this.knightAnimated.animationSpeed = 0.30;
 
-        const auxZero = new Graphics();
+        /*const auxZero = new Graphics();
         auxZero.beginFill(0xffffff);
         auxZero.drawCircle(0,0,5);
-        auxZero.endFill();
+        auxZero.endFill();*/
 
         this.hitbox = new Graphics();
         this.hitbox.beginFill(0xFF00FF, 0.1);
-        this.hitbox.drawRect(0,0,35,80);
+        this.hitbox.drawRect(0,0,35,40);
         this.hitbox.endFill();
 
         this.addChild(this.knightAnimated)
-        this.addChild(auxZero);
+        //this.addChild(auxZero);
         this.knightAnimated.addChild(this.hitbox);
         this.hitbox.x = -13;
-        this.hitbox.y = -80;
+        this.hitbox.y = -40;
 
         this.acceleration.y = Player.GRAVITY;
 
@@ -65,6 +78,7 @@ export class Player extends PhysicsContainer implements IHitbox {
         Keyboard.down.off("ArrowUp", this.jump);
     }
 
+    
     public override update(deltaMS: number){
 
         super.update(deltaMS/1000);
@@ -100,7 +114,7 @@ export class Player extends PhysicsContainer implements IHitbox {
     private jump(){
         if(this.canJump){
             this.canJump = false;
-            this.speed.y = -500;
+            this.speed.y = -Player.JUMP_SPEED;
         }
     }
 
@@ -114,7 +128,7 @@ export class Player extends PhysicsContainer implements IHitbox {
         return this.hitbox.getBounds();
     }
 
-    
+
     separate(overlap: Rectangle, platform: ObservablePoint<any>) {
         
         if (overlap.width < overlap.height){
