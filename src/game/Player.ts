@@ -9,7 +9,7 @@ export class Player extends PhysicsContainer implements IHitbox {
     private static readonly GRAVITY = 15; 
 
     // Velocidad de movimiento horizontal del objeto player en px por frame.  
-    private static readonly MOVE_SPEED = 300;
+    private static readonly MOVE_SPEED = 100;
 
     private static readonly JUMP_SPEED = 600;
 
@@ -65,12 +65,12 @@ export class Player extends PhysicsContainer implements IHitbox {
         this.addChild(this.knightAnimated)
         //this.addChild(auxZero);
         this.knightAnimated.addChild(this.hitbox);
-        this.hitbox.x = -13;
+        this.hitbox.x = -15;
         this.hitbox.y = -40;
 
         this.acceleration.y = Player.GRAVITY;
 
-        Keyboard.down.on("ArrowUp", this.jump, this)
+        Keyboard.down.on("ArrowUp", this.jump, this) // Evento para que player salte
     }
 
     public override destroy(options: any){
@@ -84,6 +84,7 @@ export class Player extends PhysicsContainer implements IHitbox {
         super.update(deltaMS/1000);
         this.knightAnimated.update(deltaMS/(1000/60));
 
+        // Movimiento 
         if(Keyboard.state.get("ArrowRight")){
             this.speed.x = Player.MOVE_SPEED;
             this.knightAnimated.scale.x = 2;
@@ -93,7 +94,6 @@ export class Player extends PhysicsContainer implements IHitbox {
         }else {
             this.speed.x = 0;
         }
-
         /*if(Keyboard.state.get("ArrowUp")){
             this.speed.y = -Player.MOVE_SPEED;
     
@@ -129,7 +129,7 @@ export class Player extends PhysicsContainer implements IHitbox {
     }
 
 
-    separate(overlap: Rectangle, platform: ObservablePoint<any>) {
+    public separate(overlap: Rectangle, platform: ObservablePoint<any>) {
         
         if (overlap.width < overlap.height){
 
@@ -152,6 +152,7 @@ export class Player extends PhysicsContainer implements IHitbox {
             } else if (this.y < platform.y) {
 
                 this.y += overlap.height; 
+                this.speed.y = 0;
             }
         }
     }

@@ -7,7 +7,7 @@ export class Platform extends PhysicsContainer implements IHitbox{
 
     private hitbox: Graphics;
 
-    constructor(speed:number){
+    constructor(){
         super();
 
         const platformContainer = new Container();
@@ -33,7 +33,7 @@ export class Platform extends PhysicsContainer implements IHitbox{
         platformContainer.addChild(this.hitbox);
 
         // Velocidad de movimiento de la plataforma. Negativa para que vaya hacia la izquierda.
-        this.speed.x = -speed;
+        //this.speed.x = -speed;
     }
 
     // Forma de conseguir rectángulo 

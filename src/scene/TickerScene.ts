@@ -35,29 +35,24 @@ export class TickerScene extends Container implements IUpdateable {
         this.platforms = [];
 
         // Objeto de tipo Platform() con el fin de crear una plataforma.
-        const platform_1 = new Platform(100);
-        //platform_1.x = 565;
-        //platform_1.y = 550;
+        const platform_1 = new Platform();
         platform_1.position.set(565,550);
         this.world.addChild(platform_1);
         this.platforms.push(platform_1);
         
-        const platform_2 = new Platform(100);
-        //platform_2.x = platform_1.x + 300;
-        //platform_2.y = 450;
+        const platform_2 = new Platform();
         platform_2.position.set(865,450);
         this.world.addChild(platform_2);
         this.platforms.push(platform_2); 
 
-        const platform_3 = new Platform(100);
-        //platform_3.x = platform_2.x + 300;
-        //platform_3.y = 550;
+        const platform_3 = new Platform(); 
         platform_3.position.set(1165,550)
         this.world.addChild(platform_3);
         this.platforms.push(platform_3)
 
         // Objeto de tipo Player() que hereda de Sprite y tiene los métodos propios del jugador
         this.playerKnight = new Player();
+        this.playerKnight.position.set(160,100)
         this.playerKnight.scale.set(2);
         this.world.addChild(this.playerKnight);
 
@@ -76,10 +71,10 @@ export class TickerScene extends Container implements IUpdateable {
         if (this.timePassed > (2000 * 200 / this.gameSpeed)){
             this.gameSpeed += 10;
             this.timePassed = 0;
-            const plat = new Platform(100);
+            const plat = new Platform();
             //platform_1.x = 565;
             //platform_1.y = 550;
-            plat.position.set(WIDTH,Math.random() * 1080);
+            plat.position.set(WIDTH,Math.random() * 1000);
             this.world.addChild(plat);
             this.platforms.push(plat);
         }
@@ -96,9 +91,34 @@ export class TickerScene extends Container implements IUpdateable {
 
             //  Si el jugador choca contra la plataforma devuelve un rectángulo, sino null
             const overlap = checkCollision(this.playerKnight, platform);
+
             if (overlap != null){
                 this.playerKnight.separate(overlap, platform.position);
-            }
+                /*if (overlap.width < overlap.height){
+
+                    if (this.playerKnight.x > platform.x){
+
+                        this.playerKnight.x += overlap.width;
+
+                    } else if(this.playerKnight.x < platform.x) {
+
+                        this.playerKnight.x -= overlap.width;
+                    }
+                    
+                } else {
+
+                    if (this.playerKnight.y > platform.y){
+
+                        this.playerKnight.y -= overlap.height;
+
+                    } else if(this.playerKnight.y < platform.y) {
+
+                        this.playerKnight.y += overlap.height;
+                    }
+
+                }*/
+               
+            } 
 
             if (platform.getHitbox().right < 0){
 
